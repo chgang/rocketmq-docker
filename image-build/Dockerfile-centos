@@ -21,18 +21,20 @@
 ################################################################################
 FROM eclipse-temurin:8-jdk-centos7 AS builder
 
-ARG version
+ARG version=4.9.7
 
 RUN set -eux \
     && yum -y update \
     && yum -y install curl gnupg unzip \
     && yum clean all -y
 
-RUN curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip \
-    && curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc \
-	&& curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS \
-    && gpg --import KEYS \
-    && gpg --batch --verify rocketmq.zip.asc rocketmq.zip
+#RUN curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip -o rocketmq.zip \
+#    && curl -L https://archive.apache.org/dist/rocketmq/${version}/rocketmq-all-${version}-bin-release.zip.asc -o rocketmq.zip.asc \
+#	&& curl -L https://www.apache.org/dist/rocketmq/KEYS -o KEYS \
+#    && gpg --import KEYS \
+#    && gpg --batch --verify rocketmq.zip.asc rocketmq.zip
+
+ADD rocketmq-4.9.7.zip rocketmq.zip
 
 RUN unzip rocketmq.zip \
     && mkdir -p /tmp/rocketmq-${version} \
@@ -49,7 +51,7 @@ ARG group=rocketmq
 ARG uid=3000
 ARG gid=3000
 
-ARG version
+ARG version=4.9.7
 
 # Rocketmq version
 ENV ROCKETMQ_VERSION ${version}

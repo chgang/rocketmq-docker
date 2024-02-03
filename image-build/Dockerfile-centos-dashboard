@@ -36,17 +36,17 @@ ARG gid=3000
 RUN groupadd -g ${gid} ${group} \
     && useradd -u ${uid} -g ${gid} -m -s /bin/bash ${user}
 
-ARG version
+ARG version=4.9.7
 
 # install maven 3.6.3
 ARG MAVEN_VERSION=3.6.3
 ARG MAVEN_DOWNLOAD_URL=https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
 
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
-    wget -O /tmp/apache-maven.tar.gz ${MAVEN_DOWNLOAD_URL} --no-check-certificate && \
-    tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 && \
-    rm -f /tmp/apache-maven.tar.gz && \
-    ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+#RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
+#    wget -O /tmp/apache-maven.tar.gz ${MAVEN_DOWNLOAD_URL} --no-check-certificate && \
+#    tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 && \
+#    rm -f /tmp/apache-maven.tar.gz && \
+#    ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
     
 ### make it faster if remove those "#"s bellow
 # RUN sed -i '159i \
@@ -58,7 +58,7 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref && \
 #     </mirror> \
 # ' /usr/share/maven/conf/settings.xml
 
-RUN cat /usr/share/maven/conf/settings.xml
+RUN #cat /usr/share/maven/conf/settings.xml
 
 ENV ROCKETMQ_DASHBOARD_VERSION ${version}
 ENV ROCKETMQ_DASHBOARD_HOME  /home/rocketmq/rocketmq-dashboard-${ROCKETMQ_DASHBOARD_VERSION}
@@ -91,4 +91,4 @@ RUN yum remove wget unzip openssl -y
 
 RUN chown -R ${uid}:${gid} ${ROCKETMQ_DASHBOARD_HOME}
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "bin/rocketmq-dashboard.jar"];
+ENTRYPOINT ["java", "-jar", "bin/rocketmq-dashboard.jar"]
